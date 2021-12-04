@@ -15,7 +15,7 @@ def calc(rating, popular):
         oneCount = 0
         zeroCount = 0
         for entry in rating:
-            if rating[0][0] == "1":
+            if entry[0][0] == "1":
                 oneCount += 1
             else:
                 zeroCount += 1
@@ -30,9 +30,6 @@ def calc(rating, popular):
             else:
                 match = "1"
         rating = [[x[0][1:],x[1]] for x in rating if x[0][0] == match]
-        print()
-        print(rating)
-
 
     return int(rating[0][1],2) 
         
