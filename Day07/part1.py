@@ -9,20 +9,10 @@ for line in file:
         crabs.append(int(crab))
 crabs = np.array(crabs)
 
-target = round(crabs.mean())
-costsCur = 0
-costsPrev = 0
+target = np.median(crabs)
+cost = 0
 
 for crab in crabs:
-    costsCur += abs(crab - target)
-    costsPrev += abs(crab - (target - 1))
+    cost += abs(target - crab)
 
-while costsCur > costsPrev:
-    target -= 1
-    costsPrev = 0
-    costsCur = 0
-    for crab in crabs:
-        costsCur += abs(crab - target)
-        costsPrev += abs(crab - (target - 1))
-
-print(costsCur)
+print(cost)
