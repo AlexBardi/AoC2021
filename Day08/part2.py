@@ -1,6 +1,6 @@
 file = open("input.txt")
 
-diffCount = 0
+totalCount = 0
 for line in file:
     input = line.split()[:10]
     inSets = []
@@ -9,20 +9,64 @@ for line in file:
         for char in entry:
             inSet.add(char)
         inSets.append(inSet)
-    inDict = {}
+    numToSet = {}
+    toRemove = []
     for inSet in inSets:
         if len(inSet) == 2:
-            inDict[1] = inSet
+            numToSet[1] = inSet
+            toRemove.append(inSet)
         elif len(inSet) == 4:
-            inDict[4] = inSet
+            numToSet[4] = inSet
+            toRemove.append(inSet)
         elif len(inSet) == 3:
-            inDict[7] = inSet
+            numToSet[7] = inSet
+            toRemove.append(inSet)
         elif len(inSet) == 7:
-            inDict[8] = inSet
+            numToSet[8] = inSet
+            toRemove.append(inSet)
+    for inSet in toRemove:
+        inSets.remove(inSet)
+
+    toRemove = []
+    for inSet in inSets:
+        if len(inSet) == 6:
+            if inSet.issuperset(numToSet[4]):
+                numToSet[9] = inSet
+                toRemove.append(inSet)
+            elif inSet.issuperset(numToSet[1]):
+                numToSet[0] = inSet
+                toRemove.append(inSet)
+            else:
+                numToSet[6] = inSet
+                toRemove.append(inSet)
+    for inSet in toRemove:
+        inSets.remove(inSet)
+
+    for inSet in inSets:
+        if inSet.issubset(numToSet[9]):
+            if numToSet[1].issubset(inSet):
+                numToSet[3] = inSet
+            else:
+                numToSet[5] = inSet
+        else:
+            numToSet[2] = inSet
+
+    for num in range(10):
+        print(num,": ",numToSet[num])
+    print()
 
     output = line.split()[-4:]
-    for digit in output:
-        if len(digit) == 2 or len(digit) == 4 or len(digit) == 3 or len(digit) == 7:
-            diffCount += 1
+    subSum = 0
+    for entry in output:
+        outSet = set()
+        for char in entry:
+            outSet.add(char)
+        for num in numToSet:
+            if numToSet[num] == outSet:
+                subSum *= 10
+                subSum += num
+                break
+    totalCount += subSum
 
-print(diffCount)
+print(totalCount)
+
