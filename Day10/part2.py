@@ -1,25 +1,39 @@
 file = open("input.txt")
 
 openings = ["(", "[", "{", "<"]
-closings = [")", "]", "}" ,">"]
+closings = [")", "]", "}", ">"]
 
-scores = {")" : 3,
-          "]" : 57,
-          "}" : 1197,
-          ">" : 25137
+pairings = {"(" : ")",
+            "[" : "]",
+            "{" : "}",
+            "<" : ">"
+}
+
+scores = {")": 1,
+          "]": 2,
+          "}": 3,
+          ">": 4
           }
 
-totalError = 0
+errors = []
 
 for line in file:
+    incorrectLine = False
     stack = []
     for char in line:
         if any(char == openner for openner in openings):
             stack.append(char)
-        if any(char == closer for closer in closings):
+        elif any(char == closer for closer in closings):
             top = stack.pop()
-            if top != char:
-                totalError += scores[char]
+            if pairings[top] != char:
+                incorrectLine = True
                 break
+    if not incorrectLine:
+        error = 0
+        while len(stack) > 0:
+            error *= 5
+            error += scores[pairings[stack.pop()]]
+        errors.append(error)
 
-print(totalError)
+errors.sort()
+print(errors[(len(errors) - 1) // 2])
